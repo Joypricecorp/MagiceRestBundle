@@ -1,6 +1,6 @@
 <?php
 
-namespace Magice\Bundle\WebBundle\Controller;
+namespace Magice\Bundle\RestBundle\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
 use Symfony\Component\HttpFoundation\Response;
