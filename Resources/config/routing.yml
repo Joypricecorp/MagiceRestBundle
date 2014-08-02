@@ -1,3 +1,0 @@
-magice_rest_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: MagiceRestBundle:Default:index }

@@ -37,7 +37,6 @@ class ViewResponseListener extends TemplateListener
 
     /**
      * Constructor.
-     *
      * @param ContainerInterface $container The service container instance
      */
     public function __construct(ContainerInterface $container)
@@ -48,7 +47,6 @@ class ViewResponseListener extends TemplateListener
     /**
      * Guesses the template name to render and its variables and adds them to
      * the request object.
-     *
      * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
@@ -65,7 +63,6 @@ class ViewResponseListener extends TemplateListener
     /**
      * Renders the parameters and template and initializes a new response object with the
      * rendered content.
-     *
      * @param GetResponseForControllerResultEvent $event A GetResponseForControllerResultEvent instance
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
@@ -97,8 +94,10 @@ class ViewResponseListener extends TemplateListener
                 $view->setStatusCode($configuration->getStatusCode());
             }
 
-            if ($responder = $configuration->getResponder()) {
-                $this->container->get('mg.rest.responder')->get($responder)->setView($view);
+            if (get_class($configuration) === 'Magice\Bundle\RestBundle\Annotation\View') {
+                if ($responder = $configuration->getResponder()) {
+                    $this->container->get('mg.rest.responder')->get($responder)->setView($view);
+                }
             }
 
             if ($configuration->getSerializerGroups() && !$customViewDefined) {
