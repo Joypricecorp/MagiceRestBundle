@@ -1,0 +1,39 @@
+{
+    "name": "magice/rest-bundle",
+    "type": "symfony-bundle",
+    "description": "User management integration for Symfony2 applications.",
+    "keywords": ["user"],
+    "homepage": "https://github.com/Joypricecorp/MagiceRestBundle",
+    "license": "MIT",
+    
+    "authors": [
+        {
+            "name":  "ツ Liverbool",
+            "email": "nukboon@gmail.com"
+        }
+    ],
+    
+    "require": {
+        "php": ">=5.3.3",
+        "sylius/resource": "0.11.*@dev"
+    },
+    
+    "require-dev": {
+        "liil/kint":                            "master-dev",
+        "doctrine/doctrine-fixtures-bundle":    "master-dev"
+    },
+    
+    "autoload": {
+        "psr-0": { "Magice\\Bundle\\UserBundle\\": "" }
+    },
+    
+    "target-dir": "Magice/Bundle/RestBundle",
+    
+    "minimum-stability": "dev",
+    
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master-dev"
+        }
+    }
+}

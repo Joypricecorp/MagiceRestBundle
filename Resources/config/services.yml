@@ -1,0 +1,12 @@
+parameters:
+    magice.rest.class.responder: Magice\Bundle\RestBundle\Responder\Responder
+    magice.rest.class.responder.sencha: Magice\Bundle\RestBundle\Responder\Sencha
+
+services:
+    mg.rest.responder:
+        class: "%magice.rest.class.responder%"
+
+    mg.rest.responder.sencha:
+        class: "%magice.rest.class.responder.sencha%"
+        tags:
+            - { name: mg.rest.tag.responder, alias: sencha }
