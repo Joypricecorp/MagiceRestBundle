@@ -85,6 +85,8 @@ class ViewResponseListener extends TemplateListener
             $customViewDefined = false;
         }
 
+        $isMagice = get_class($configuration) === 'Magice\Bundle\RestBundle\Annotation\View';
+
         if ($configuration) {
             if ($configuration->getTemplateVar()) {
                 $view->setTemplateVar($configuration->getTemplateVar());
@@ -94,10 +96,8 @@ class ViewResponseListener extends TemplateListener
                 $view->setStatusCode($configuration->getStatusCode());
             }
 
-            if (get_class($configuration) === 'Magice\Bundle\RestBundle\Annotation\View') {
-                if ($responder = $configuration->getResponder()) {
-                    $this->container->get('mg.rest.responder')->get($responder)->setView($view);
-                }
+            if ($isMagice && $responder = $configuration->getResponder()) {
+                $this->container->get('mg.rest.responder')->get($responder)->setView($view);
             }
 
             if ($configuration->getSerializerGroups() && !$customViewDefined) {
@@ -149,7 +149,7 @@ class ViewResponseListener extends TemplateListener
         }
 
         // set header
-        if ($headerId = $configuration->getHeaderId()) {
+        if ($isMagice && $headerId = $configuration->getHeaderId()) {
             # TODO: improve this section
             $data = (array) $view->getData();
 
