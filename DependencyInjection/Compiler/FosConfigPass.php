@@ -30,5 +30,9 @@ class FosConfigPass implements CompilerPassInterface
         $bd->getDefinition('fos_rest.view_handler')
             ->setClass('Magice\Bundle\RestBundle\Util\ViewHandler')
             ;
+
+        // view listener
+        $class = 'Magice\Bundle\RestBundle\EventListener\ViewResponseListener';
+        $bd->getDefinition('fos_rest.view_response_listener')->setClass($class);
     }
 }

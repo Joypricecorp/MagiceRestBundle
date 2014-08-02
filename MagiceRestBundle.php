@@ -11,7 +11,6 @@ class MagiceRestBundle extends Bundle
     public function build(ContainerBuilder $bd)
     {
         $bd->addCompilerPass(new Compiler\FosConfigPass());
-        $bd->addCompilerPass(new Compiler\ViewResponseListenerPass());
         $bd->addCompilerPass(new Compiler\ResponderPass());
     }
 }
