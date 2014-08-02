@@ -1,8 +1,8 @@
 {
     "name": "magice/rest-bundle",
     "type": "symfony-bundle",
-    "description": "User management integration for Symfony2 applications.",
-    "keywords": ["user"],
+    "description": "Rest integration for Symfony2 applications.",
+    "keywords": ["rest"],
     "homepage": "https://github.com/Joypricecorp/MagiceRestBundle",
     "license": "MIT",
     
