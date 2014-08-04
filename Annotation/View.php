@@ -12,6 +12,11 @@ class View extends \FOS\RestBundle\Controller\Annotations\View
     protected $headerId;
 
     /**
+     * @var bool
+     */
+    protected $roleSerializer = false;
+
+    /**
      * @param mixed $responder
      */
     public function setResponder($responder)
@@ -39,5 +44,15 @@ class View extends \FOS\RestBundle\Controller\Annotations\View
     public function getHeaderId()
     {
         return $this->headerId;
+    }
+
+    public function setRoleSerializer($value)
+    {
+        $this->roleSerializer = $value;
+    }
+
+    public function getRoleSerializer()
+    {
+        return $this->roleSerializer;
     }
 }

@@ -100,6 +100,19 @@ class ViewResponseListener extends TemplateListener
                 $this->container->get('mg.rest.responder')->get($responder)->setView($view);
             }
 
+            // if ignore if force setSerializerGroups
+            if ($isMagice && empty($configuration->getSerializerGroups()) && $configuration->getRoleSerializer()) {
+
+                $roles  = $this->container->get('security.context')->getToken()->getRoles();
+                $groups = array();
+
+                foreach ($roles as $role) {
+                    $groups[] = strtolower(preg_replace('/ROLE_/', '', $role->getRole()));
+                }
+
+                $configuration->setSerializerGroups($groups);
+            }
+
             if ($configuration->getSerializerGroups() && !$customViewDefined) {
                 $context = $view->getSerializationContext() ? : new SerializationContext();
                 $context->setGroups($configuration->getSerializerGroups());

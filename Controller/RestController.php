@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class RestController extends FOSRestController
 {
     /**
-     * @return \Magice\Bundle\UserBundle\Entity\User;
+     * @return \Magice\Bundle\UserBundle\Model\User;
      */
     public function getUser()
     {
