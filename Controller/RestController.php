@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class RestController extends FOSRestController
+abstract class RestController extends FOSRestController
 {
     /**
      * @return \Magice\Bundle\UserBundle\Model\User;
@@ -33,6 +33,7 @@ class RestController extends FOSRestController
     private function hasObjectProperty($object, $propertyName)
     {
         $class = new \ReflectionClass($object);
+
         return $class->hasProperty($propertyName);
     }
 
@@ -43,7 +44,7 @@ class RestController extends FOSRestController
         }
 
         $getter = 'get' . $field;
-        $value  = $object->$getter();
+        $value = $object->$getter();
 
         if ($value instanceof \DateTime) {
             $value = $value->format('Y-m-d H:i:s');
@@ -64,23 +65,23 @@ class RestController extends FOSRestController
 
     /**
      * @param FormTypeInterface $form
-     * @param object            $classData
-     * @param FormProcessing    $processing
+     * @param object $classData
+     * @param FormProcessing $processing
      *
      * @return \Symfony\Component\Form\Form|FormTypeInterface
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
     protected function processForm(FormTypeInterface $form, $classData, FormProcessing $processing = null)
     {
-        $request    = $this->get('request');
-        $form       = $this->createForm($form, $classData);
-        $processing = $processing ? : new FormProcessing();
+        $request = $this->get('request');
+        $form = $this->createForm($form, $classData);
+        $processing = $processing ?: new FormProcessing();
 
         $processing->init($request, $form, $classData);
 
         if ($request->getContentType() === 'json') {
             $content = $request->getContent();
-            $data    = array();
+            $data = array();
 
             $submitData = json_decode($content, true);
 
@@ -145,14 +146,30 @@ class RestController extends FOSRestController
     }
 
     /**
-     * @param object                                            $entity
+     * @param null $name
+     * @return object
+     */
+    protected function getDomainManager($name = null)
+    {
+        $dm = $this->get('mg.rest.manager');
+
+        if ($name) {
+            $dm->setManager($this->getEntityManager($name));
+        }
+
+        return $dm;
+    }
+
+    /**
+     * @param object $entity
      * @param \Doctrine\Common\Persistence\ObjectManager|string $manager
      *
      * @return object
+     * @deprecated use domain manager($dm = $this->getDomainManager())
      */
     protected function save($entity, $manager = null)
     {
-        $em = (is_string($manager) ? $this->getEntityManager($manager) : $manager) ? : $this->getEntityManager();
+        $em = (is_string($manager) ? $this->getEntityManager($manager) : $manager) ?: $this->getEntityManager();
         $em->persist($entity);
         $em->flush($entity);
 
@@ -160,23 +177,25 @@ class RestController extends FOSRestController
     }
 
     /**
-     * @param object                                            $entity
+     * @param object $entity
      * @param \Doctrine\Common\Persistence\ObjectManager|string $manager
+     * @deprecated use domain manager($dm = $this->getDomainManager())
      */
     protected function delete($entity, $manager = null)
     {
-        $em = (is_string($manager) ? $this->getEntityManager($manager) : $manager) ? : $this->getEntityManager();
+        $em = (is_string($manager) ? $this->getEntityManager($manager) : $manager) ?: $this->getEntityManager();
         $em->remove($entity);
         $em->flush($entity);
     }
 
     /**
      * @param string|object $target #Service #Entity
-     * @param int           $id
-     * @param string|null   $manager
+     * @param int $id
+     * @param string|null $manager
      *
      * @return object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @deprecated use domain manager($dm = $this->getDomainManager())
      */
     protected function findNotFound($target, $id, $manager = null)
     {
@@ -191,7 +210,10 @@ class RestController extends FOSRestController
                 $entity = $em->find(get_class($target), $id);
             }
         } else {
-            if ($this->container->has($target) && ($target = $this->get($target)) && $target instanceof ObjectRepository) {
+            if ($this->container->has($target) && ($target = $this->get(
+                    $target
+                )) && $target instanceof ObjectRepository
+            ) {
                 // repository service id
                 $entity = $target->find($id);
             } else {
@@ -209,11 +231,12 @@ class RestController extends FOSRestController
 
     /**
      * @param string|object $target #Service #Entity
-     * @param int           $id
-     * @param string|null   $manager
+     * @param int $id
+     * @param string|null $manager
      *
      * @return object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @deprecated use domain manager($dm = $this->getDomainManager())
      */
     protected function en($target, $id, $manager = null)
     {
@@ -222,17 +245,17 @@ class RestController extends FOSRestController
 
     /**
      * @param string $expression eg. ->acl("is_granted('OWNER')", $entity)
-     * @param null   $object
+     * @param null $object
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     protected function acl($expression, $object = null)
     {
-        $roleHierarchy   = $this->get('security.role_hierarchy');
-        $trustResolver   = $this->get('security.authentication.trust_resolver');
+        $roleHierarchy = $this->get('security.role_hierarchy');
+        $trustResolver = $this->get('security.authentication.trust_resolver');
         $securityContext = $this->get('security.context');
-        $request         = $this->get('request');
-        $token           = $securityContext->getToken();
+        $request = $this->get('request');
+        $token = $securityContext->getToken();
 
         if (null !== $roleHierarchy) {
             $roles = $roleHierarchy->getReachableRoles($token->getRoles());
@@ -241,17 +264,17 @@ class RestController extends FOSRestController
         }
 
         $variables = array(
-            'token'            => $token,
-            'user'             => $token->getUser(),
-            'object'           => $object,
-            'request'          => $request,
-            'roles'            => array_map(
+            'token' => $token,
+            'user' => $token->getUser(),
+            'object' => $object,
+            'request' => $request,
+            'roles' => array_map(
                 function ($role) {
                     return $role->getRole();
                 },
                 $roles
             ),
-            'trust_resolver'   => $trustResolver,
+            'trust_resolver' => $trustResolver,
             'security_context' => $securityContext,
         );
 

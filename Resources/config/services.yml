@@ -1,6 +1,7 @@
 parameters:
     magice.rest.class.responder: Magice\Bundle\RestBundle\Responder\Responder
     magice.rest.class.responder.sencha: Magice\Bundle\RestBundle\Responder\Sencha
+    magice.rest.class.domain.manager: Magice\Bundle\RestBundle\Domain\Manager
 
 services:
     mg.rest.responder:
@@ -10,3 +11,7 @@ services:
         class: "%magice.rest.class.responder.sencha%"
         tags:
             - { name: mg.rest.tag.responder, alias: sencha }
+
+    mg.rest.manager:
+      class: "%magice.rest.class.domain.manager%"
+      arguments: [@doctrine.orm.entity_manager, @validator, @service_container]

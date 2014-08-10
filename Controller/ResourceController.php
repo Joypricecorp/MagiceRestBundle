@@ -5,7 +5,7 @@ namespace Magice\Bundle\RestBundle\Controller;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController as BaseResourceController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ResourceController extends BaseResourceController
+abstract class ResourceController extends BaseResourceController
 {
     public function deleteAction(Request $request)
     {
