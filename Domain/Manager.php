@@ -82,7 +82,7 @@ class Manager
 
         if (count($violations)) {
             $exception = new ManagerException(
-                sprintf('Your resource (%s) constraints violations.', get_class($this->resource))
+                sprintf('Data for resource (%s) constraint violation.', get_class($this->resource))
             );
 
             $exception->setViolations($violations);
