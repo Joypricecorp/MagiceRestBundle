@@ -159,7 +159,7 @@ class Manager
      * @param $idOrCriterias
      * @return mixed
      */
-    protected function findNotFound($resource, $idOrCriterias)
+    public function findNotFound($resource, $idOrCriterias)
     {
         $methodFind = is_array($idOrCriterias) ? 'findOneBy' : 'find';
 
