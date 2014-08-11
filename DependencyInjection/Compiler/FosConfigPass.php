@@ -21,10 +21,15 @@ class FosConfigPass implements CompilerPassInterface
             ->setClass('Magice\Bundle\RestBundle\Util\ExceptionWrapper');
 
         // override jms/seri
-        /*if ($bd->hasDefinition('jms_serializer.camel_case_naming_strategy')) {
+        if ($bd->hasDefinition('jms_serializer.camel_case_naming_strategy')) {
             $bd->getDefinition('jms_serializer.camel_case_naming_strategy')
-                ->setClass('JMS\Serializer\Naming\IdenticalPropertyNamingStrategy');
-        }*/
+                ->setClass($bd->getParameter('magice.rest.serializer_naming_strategy'));
+
+            $bd->setParameter(
+                'jms_serializer.cache_naming_strategy.class',
+                $bd->getParameter('magice.rest.serializer_naming_strategy')
+            );
+        }
 
         // viewhandler
         $bd->getDefinition('fos_rest.view_handler')

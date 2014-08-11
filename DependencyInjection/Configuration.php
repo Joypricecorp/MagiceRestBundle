@@ -20,9 +20,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('magice_rest');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->scalarNode('serializer_naming_strategy')->defaultValue('identical')->cannotBeEmpty()->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
