@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 abstract class RestController extends FOSRestController
 {
     /**
-     * @return \Magice\Bundle\UserBundle\Model\User;
+     * @return \Symfony\Component\Security\Core\User\UserInterface;
      */
     public function getUser()
     {
@@ -147,7 +147,7 @@ abstract class RestController extends FOSRestController
 
     /**
      * @param null $name
-     * @return object
+     * @return \Magice\Bundle\RestBundle\Domain\Manager
      */
     protected function getDomainManager($name = null)
     {
