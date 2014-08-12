@@ -161,7 +161,9 @@ class Manager
      */
     public function findNotFound($resource, $idOrCriterias)
     {
-        $methodFind = is_array($idOrCriterias) ? 'findOneBy' : 'find';
+        $isCompositKeys = is_array($idOrCriterias);
+        $idOrCriterias = is_object($idOrCriterias) ? (array) $idOrCriterias : $idOrCriterias;
+        $methodFind = is_array($idOrCriterias) && !$isCompositKeys ? 'findOneBy' : 'find';
 
         if (is_object($resource)) {
             if ($resource instanceof ObjectRepository) {
