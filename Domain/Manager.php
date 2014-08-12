@@ -168,10 +168,10 @@ class Manager
         if (is_object($resource)) {
             if ($resource instanceof ObjectRepository) {
                 // repository service
-                $resource = $resource->$methodFind($idOrCriterias);
+                $repository = $resource;
             } else {
                 // entity object
-                $resource = $this->manager->getRepository(get_class($resource))->$methodFind($idOrCriterias);
+                $repository = $this->manager->getRepository(get_class($resource));
             }
         } else {
             if ($this->container->has($resource)
@@ -179,12 +179,14 @@ class Manager
                 && $repository instanceof ObjectRepository
             ) {
                 // repository service id
-                $resource = $repository->$methodFind($idOrCriterias);
+                // we got it!
             } else {
                 // entity class name
-                $resource = $this->manager->getRepository($resource)->$methodFind($idOrCriterias);
+                $repository = $this->manager->getRepository($resource);
             }
         }
+
+        $resource = $repository->$methodFind($idOrCriterias);
 
         if (empty($resource)) {
             throw new NotFoundHttpException(
