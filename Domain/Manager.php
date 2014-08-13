@@ -1,7 +1,7 @@
 <?php
 namespace Magice\Bundle\RestBundle\Domain;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,7 +23,7 @@ class Manager
     private $resource;
 
     /**
-     * @var ObjectManager
+     * @var EntityManager
      */
     private $manager;
 
@@ -32,7 +32,7 @@ class Manager
      */
     private $container;
 
-    public function __construct(ObjectManager $manager, ValidatorInterface $validator, ContainerInterface $container)
+    public function __construct(EntityManager $manager, ValidatorInterface $validator, ContainerInterface $container)
     {
         $this->validator = $validator;
         $this->manager = $manager;
@@ -40,10 +40,10 @@ class Manager
     }
 
     /**
-     * @param ObjectManager $manager
+     * @param EntityManager $manager
      * @return $this
      */
-    public function setManager(ObjectManager $manager)
+    public function setManager(EntityManager $manager)
     {
         $this->manager = $manager;
 
@@ -78,7 +78,7 @@ class Manager
     public function delete($resource = null)
     {
         $this->resource = $resource ?: $this->resource;
-        $this->manager->remove($resource);
+        $this->manager->remove($this->resource);
         $this->manager->flush();
     }
 
@@ -87,9 +87,8 @@ class Manager
      * @param array|null $validationGroups
      * @return $this
      * @throws \InvalidArgumentException
-     * @throws ManagerException
      */
-    public function validate($resource = null, $validationGroups = array())
+    public function validate($resource = null, $validationGroups = null)
     {
         if (is_array($resource)) {
             $validationGroups = $resource;
@@ -220,6 +219,11 @@ class Manager
         return $resource;
     }
 
+    /**
+     * Begin transaction
+     * @param null $resource
+     * @return $this
+     */
     public function begin($resource = null)
     {
         $this->resource = $resource ?: $this->resource;
