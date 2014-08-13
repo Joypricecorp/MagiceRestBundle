@@ -83,13 +83,23 @@ class Manager
     }
 
     /**
-     * @param $resource
+     * @param array|object|null $resource Resource to handle (if array mean that is $validationGroups)
      * @param array $validationGroups
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function validate($resource, $validationGroups = array())
+    public function validate($resource = null, $validationGroups = array())
     {
-        $this->resource = $resource;
+        if (is_array($resource)) {
+            $validationGroups = $resource;
+        } else {
+            $this->resource = $resource ?: $this->resource;
+        }
+
+        if (empty($this->resource)) {
+            throw new \InvalidArgumentException('Resource can not be empty.');
+        }
+
         $violations = $this->validator->validate($this->resource, null, $validationGroups);
 
         if (count($violations)) {
