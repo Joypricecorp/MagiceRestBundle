@@ -197,8 +197,9 @@ class Manager
         return $resource;
     }
 
-    public function begin()
+    public function begin($resource = null)
     {
+        $this->resource = $resource ?: $this->resource;
         $this->manager->getConnection()->beginTransaction();
 
         return $this;
