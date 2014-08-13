@@ -87,6 +87,7 @@ class Manager
      * @param array $validationGroups
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws ManagerException
      */
     public function validate($resource = null, $validationGroups = array())
     {
