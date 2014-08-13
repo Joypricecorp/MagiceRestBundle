@@ -84,7 +84,7 @@ class Manager
 
     /**
      * @param array|object|null $resource Resource to handle (if array mean that is $validationGroups)
-     * @param array $validationGroups
+     * @param array|null $validationGroups
      * @return $this
      * @throws \InvalidArgumentException
      * @throws ManagerException
@@ -101,7 +101,7 @@ class Manager
             throw new \InvalidArgumentException('Resource can not be empty.');
         }
 
-        $violations = $this->validator->validate($this->resource, null, $validationGroups);
+        $violations = $this->validator->validate($this->resource, $validationGroups);
 
         if (count($violations)) {
             $exception = new ManagerException(
