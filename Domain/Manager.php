@@ -51,6 +51,18 @@ class Manager
     }
 
     /**
+     * set resource
+     * @param object $resource
+     * @return $this
+     */
+    public function resource($resource)
+    {
+        $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
      * @param null $resource
      */
     public function save($resource = null)
