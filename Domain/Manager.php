@@ -196,4 +196,26 @@ class Manager
 
         return $resource;
     }
+
+    public function begin()
+    {
+        $this->manager->getConnection()->beginTransaction();
+
+        return $this;
+    }
+
+    public function commit()
+    {
+        $this->manager->getConnection()->commit();
+    }
+
+    public function rollback()
+    {
+        $this->manager->getConnection()->rollback();
+    }
+
+    public function transactional($func)
+    {
+        $this->manager->transactional($func);
+    }
 }
